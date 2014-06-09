@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#checking for vhost dir
+VHOSTDIR="/var/www/vhosts"
+if [ ! -d $VHOSTDIR ]; then
+  echo "$VHOSTDIR does not exist, creating..."
+  mkdir $VHOSTDIR
+fi
+
+FTPGROUP="ftpusers"
+
+#checking for ftpusers group
+HASGROUP=$(grep -q $FTPGROUP /etc/group);
+I=$((HASGROUP));
+
+if [ ! $I ]; then
+   echo "group $FTPGROUP does not exit, creating..."
+   groupadd $FTPGROUP	
+fi
