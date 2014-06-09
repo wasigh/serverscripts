@@ -17,3 +17,8 @@ if [ ! $I ]; then
    echo "group $FTPGROUP does not exit, creating..."
    groupadd $FTPGROUP	
 fi
+
+
+#open up database
+iptables -I INPUT 4 -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+/etc/init.d/iptables save

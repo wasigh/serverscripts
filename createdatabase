@@ -1,0 +1,33 @@
+#!/bin/bash
+# Mysql create database
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $(basename $0) user database"
+  exit 1
+fi
+
+
+user="$1"
+database="$2"
+
+ISDBUSER=$(mysql -e "SELECT 1 FROM mysql.user WHERE user = '$user'"
+)
+
+echo $ISDBUSER
+
+if [ ! "$ISDBUSER" ]; then
+  echo "$user does not exists in database" >&2
+  exit 2
+fi
+
+DATABASENAME="${user}_${database}"
+echo creating database $DATABASENAME
+
+SQLa="create database $DATABASENAME"
+SQLb="grant all on $DATABASENAME.* to '$user'@'localhost'"
+
+echo $SQLa
+mysql -e "$SQLa"
+
+echo $SQLb
+mysql -e "$SQLb"
