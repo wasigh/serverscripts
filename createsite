@@ -12,7 +12,7 @@ domain="$2"
 database="$3"
 
 VHOSTDIR="/var/www/vhosts/$domain"
-VHOSTPATH="/$VHOSTDIR/httpdocs"
+VHOSTPATH="$VHOSTDIR/httpdocs"
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 TEMPLATE="$SCRIPTDIR/vhost.template"
 USERDIR="/home/$user"
@@ -34,9 +34,11 @@ if [ ! -d "$VHOSTPATH" ]; then
   # create VHOST dir
   mkdir -p $VHOSTPATH
   # give user ownership
-  chown $user:ftpusers $VHOSTPATH
+  chown -R $user:ftpusers $VHOSTDIR
   # create link in user dir
-  ln -s "$VHOSTPATH" "$USERLINKDIR"
+  mkdir -p $USERLINKDIR
+  mount --bind $VHOSTDIR $USERLINKDIR
+
 else
   echo "Directory already exists: $VHOSTPATH"
   exit 3 
